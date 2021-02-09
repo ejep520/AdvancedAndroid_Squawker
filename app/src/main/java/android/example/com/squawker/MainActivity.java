@@ -18,30 +18,31 @@ package android.example.com.squawker;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.example.com.squawker.databinding.ActivityMainBinding;
 import android.example.com.squawker.following.FollowingPreferenceActivity;
 import android.example.com.squawker.provider.SquawkContract;
 import android.example.com.squawker.provider.SquawkProvider;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.PreferenceManager;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 public class MainActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int LOADER_ID_MESSAGES = 0;
 
-    RecyclerView mRecyclerView;
     LinearLayoutManager mLayoutManager;
     SquawkAdapter mAdapter;
 
@@ -57,34 +58,34 @@ public class MainActivity extends AppCompatActivity implements
     static final int COL_NUM_DATE = 2;
     static final int COL_NUM_AUTHOR_KEY = 3;
 
+    ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.squawks_recycler_view);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         // Use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
+        binding.squawksRecyclerView.setHasFixedSize(true);
 
         // Use a linear layout manager
         mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        binding.squawksRecyclerView.setLayoutManager(mLayoutManager);
 
         // Add dividers
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
-                mRecyclerView.getContext(),
+                binding.squawksRecyclerView.getContext(),
                 mLayoutManager.getOrientation());
-        mRecyclerView.addItemDecoration(dividerItemDecoration);
+        binding.squawksRecyclerView.addItemDecoration(dividerItemDecoration);
 
         // Specify an adapter
         mAdapter = new SquawkAdapter();
-        mRecyclerView.setAdapter(mAdapter);
+        binding.squawksRecyclerView.setAdapter(mAdapter);
 
         // Start the loader
-        getSupportLoaderManager().initLoader(LOADER_ID_MESSAGES, null, this);
+        LoaderManager.getInstance(this).initLoader(LOADER_ID_MESSAGES, null, this);
 
     }
 
@@ -112,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements
      * Loader callbacks
      */
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         // This method generates a selection off of only the current followers
@@ -123,12 +125,12 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         mAdapter.swapCursor(data);
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         mAdapter.swapCursor(null);
     }
 }

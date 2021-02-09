@@ -16,14 +16,18 @@
 
 package android.example.com.squawker;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.example.com.squawker.provider.SquawkContract;
-import android.support.v7.widget.RecyclerView;
+// import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -35,25 +39,25 @@ public class SquawkAdapter extends RecyclerView.Adapter<SquawkAdapter.SquawkView
 
 
     private Cursor mData;
-    private static SimpleDateFormat sDateFormat = new SimpleDateFormat("dd MMM");
+    @SuppressLint("SimpleDateFormat")
+    private static final SimpleDateFormat sDateFormat = new SimpleDateFormat("dd MMM");
 
 
     private static final long MINUTE_MILLIS = 1000 * 60;
     private static final long HOUR_MILLIS = 60 * MINUTE_MILLIS;
     private static final long DAY_MILLIS = 24 * HOUR_MILLIS;
 
-
+    @NonNull
     @Override
     public SquawkViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_squawk_list, parent, false);
 
-        SquawkViewHolder vh = new SquawkViewHolder(v);
-        return vh;
+        return new SquawkViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(SquawkViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SquawkViewHolder holder, int position) {
         mData.moveToPosition(position);
 
         String message = mData.getString(MainActivity.COL_NUM_MESSAGE);
@@ -69,10 +73,10 @@ public class SquawkAdapter extends RecyclerView.Adapter<SquawkAdapter.SquawkView
         // the hour, etc.
         if (now - dateMillis < (DAY_MILLIS)) {
             if (now - dateMillis < (HOUR_MILLIS)) {
-                long minutes = Math.round((now - dateMillis) / MINUTE_MILLIS);
+                long minutes = Math.round((float)(now - dateMillis) / MINUTE_MILLIS);
                 date = String.valueOf(minutes) + "m";
             } else {
-                long minutes = Math.round((now - dateMillis) / HOUR_MILLIS);
+                long minutes = Math.round((float)(now - dateMillis) / HOUR_MILLIS);
                 date = String.valueOf(minutes) + "h";
             }
         } else {
@@ -121,7 +125,7 @@ public class SquawkAdapter extends RecyclerView.Adapter<SquawkAdapter.SquawkView
         notifyDataSetChanged();
     }
 
-    public class SquawkViewHolder extends RecyclerView.ViewHolder {
+    public static class SquawkViewHolder extends RecyclerView.ViewHolder {
         final TextView authorTextView;
         final TextView messageTextView;
         final TextView dateTextView;
@@ -129,10 +133,10 @@ public class SquawkAdapter extends RecyclerView.Adapter<SquawkAdapter.SquawkView
 
         public SquawkViewHolder(View layoutView) {
             super(layoutView);
-            authorTextView = (TextView) layoutView.findViewById(R.id.author_text_view);
-            messageTextView = (TextView) layoutView.findViewById(R.id.message_text_view);
-            dateTextView = (TextView) layoutView.findViewById(R.id.date_text_view);
-            authorImageView = (ImageView) layoutView.findViewById(
+            authorTextView = layoutView.findViewById(R.id.author_text_view);
+            messageTextView = layoutView.findViewById(R.id.message_text_view);
+            dateTextView = layoutView.findViewById(R.id.date_text_view);
+            authorImageView = layoutView.findViewById(
                     R.id.author_image_view);
         }
     }

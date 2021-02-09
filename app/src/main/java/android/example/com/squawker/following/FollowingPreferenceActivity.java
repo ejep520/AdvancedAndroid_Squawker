@@ -16,21 +16,26 @@
 package android.example.com.squawker.following;
 
 import android.example.com.squawker.R;
+import android.example.com.squawker.databinding.ActivitySettingsBinding;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
 
 /**
  * Displays an activity for who you are following
  */
 public class FollowingPreferenceActivity extends AppCompatActivity {
 
+    ActivitySettingsBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        binding = ActivitySettingsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         ActionBar actionBar = this.getSupportActionBar();
 
         // Set the action bar back button to look like an up button
