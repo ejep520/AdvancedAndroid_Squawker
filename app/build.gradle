@@ -33,6 +33,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
     // Schematic dependencies for ContentProvider
-    implementation 'net.simonvt.schematic:schematic-compiler:0.7.0'
-    implementation 'net.simonvt.schematic:schematic:0.7.0'
+    implementation 'androidx.test.ext:junit:1.1.2'
+    implementation 'com.google.firebase:firebase-iid:21.0.1'
+    implementation 'com.google.firebase:firebase-messaging:21.0.1'
 }

@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements
         String selection = SquawkContract.createSelectionForCurrentFollowers(
                 PreferenceManager.getDefaultSharedPreferences(this));
         Log.d(LOG_TAG, "Selection is " + selection);
-        return new CursorLoader(this, SquawkProvider.SquawkMessages.CONTENT_URI,
+        return new CursorLoader(this, SquawkContract.CONTENT_URI,
                 MESSAGES_PROJECTION, selection, null, SquawkContract.COLUMN_DATE + " DESC");
     }
 

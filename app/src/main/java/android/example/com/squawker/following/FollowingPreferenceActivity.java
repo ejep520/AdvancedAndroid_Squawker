@@ -15,7 +15,6 @@
 */
 package android.example.com.squawker.following;
 
-import android.example.com.squawker.R;
 import android.example.com.squawker.databinding.ActivitySettingsBinding;
 import android.os.Bundle;
 import android.view.MenuItem;

@@ -66,7 +66,7 @@ public class SquawkAdapter extends RecyclerView.Adapter<SquawkAdapter.SquawkView
 
         // Get the date for displaying
         long dateMillis = mData.getLong(MainActivity.COL_NUM_DATE);
-        String date = "";
+        String date;
         long now = System.currentTimeMillis();
 
         // Change how the date is displayed depending on whether it was written in the last minute,
@@ -74,10 +74,10 @@ public class SquawkAdapter extends RecyclerView.Adapter<SquawkAdapter.SquawkView
         if (now - dateMillis < (DAY_MILLIS)) {
             if (now - dateMillis < (HOUR_MILLIS)) {
                 long minutes = Math.round((float)(now - dateMillis) / MINUTE_MILLIS);
-                date = String.valueOf(minutes) + "m";
+                date = minutes + "m";
             } else {
                 long minutes = Math.round((float)(now - dateMillis) / HOUR_MILLIS);
-                date = String.valueOf(minutes) + "h";
+                date = minutes + "h";
             }
         } else {
             Date dateDate = new Date(dateMillis);

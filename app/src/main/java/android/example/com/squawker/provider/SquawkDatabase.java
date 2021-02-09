@@ -15,20 +15,33 @@
 */
 package android.example.com.squawker.provider;
 
-import net.simonvt.schematic.annotation.Database;
-import net.simonvt.schematic.annotation.Table;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 /**
  * Uses the Schematic (https://github.com/SimonVT/schematic) library to create a database with one
  * table for messages
  */
 
-@Database(version = SquawkDatabase.VERSION)
-public class SquawkDatabase {
+
+public class SquawkDatabase extends SQLiteOpenHelper {
 
     public static final int VERSION = 4;
 
-    @Table(SquawkContract.class)
     public static final String SQUAWK_MESSAGES = "squawk_messages";
 
+    public SquawkDatabase(Context context) {
+        super(context, null, null, VERSION);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+    }
 }

@@ -16,41 +16,22 @@
 package android.example.com.squawker.provider;
 
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.provider.BaseColumns;
 
-import net.simonvt.schematic.annotation.AutoIncrement;
-import net.simonvt.schematic.annotation.ConflictResolutionType;
-import net.simonvt.schematic.annotation.DataType;
-import net.simonvt.schematic.annotation.NotNull;
-import net.simonvt.schematic.annotation.PrimaryKey;
+public class SquawkContract implements BaseColumns {
 
-/**
- * Uses the Schematic (https://github.com/SimonVT/schematic) library to define the columns in a
- * content provider baked by a database
- */
+    public static final String _ID = BaseColumns._ID;
 
-public class SquawkContract {
-
-    @DataType(DataType.Type.INTEGER)
-    @PrimaryKey(onConflict = ConflictResolutionType.REPLACE)
-    @AutoIncrement
-    public static final String COLUMN_ID = "_id";
-
-    @DataType(DataType.Type.TEXT)
-    @NotNull
     public static final String COLUMN_AUTHOR = "author";
-
-    @DataType(DataType.Type.TEXT)
-    @NotNull
     public static final String COLUMN_AUTHOR_KEY = "authorKey";
-
-    @DataType(DataType.Type.TEXT)
-    @NotNull
     public static final String COLUMN_MESSAGE = "message";
-
-    @DataType(DataType.Type.INTEGER)
-    @NotNull
     public static final String COLUMN_DATE = "date";
 
+    public static final String CONTENT_AUTHORITY="android.example.com.squawker.provider.provider";
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    public static final String TABLE_PATH = "SQUAWKS";
+    public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, TABLE_PATH);
 
     // Topic keys as matching what is found in the database
     public static final String ASSER_KEY = "key_asser";

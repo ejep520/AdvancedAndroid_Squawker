@@ -15,33 +15,69 @@
 */
 package android.example.com.squawker.provider;
 
+
+import android.content.ContentProvider;
+import android.content.ContentValues;
+import android.content.UriMatcher;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
-import net.simonvt.schematic.annotation.ContentProvider;
-import net.simonvt.schematic.annotation.ContentUri;
-import net.simonvt.schematic.annotation.TableEndpoint;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
-/**
- * Uses the Schematic (https://github.com/SimonVT/schematic) to create a content provider and
- * define
- * URIs for the provider
- */
 
-@ContentProvider(
-        authority = SquawkProvider.AUTHORITY,
-        database = SquawkDatabase.class)
-public final class SquawkProvider {
+public class SquawkProvider extends ContentProvider {
 
     public static final String AUTHORITY = "android.example.com.squawker.provider.provider";
 
+    private SquawkDatabase helper;
+    private static final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
+    private static final int SQUAWKS = 100;
+    static {
+        matcher.addURI(SquawkContract.CONTENT_AUTHORITY, SquawkContract.TABLE_PATH, SQUAWKS);
+    }
 
-    @TableEndpoint(table = SquawkDatabase.SQUAWK_MESSAGES)
-    public static class SquawkMessages {
+    @Override
+    public boolean onCreate() {
+        helper = new SquawkDatabase(getContext());
+        return true;
+    }
 
-        @ContentUri(
-                path = "messages",
-                type = "vnd.android.cursor.dir/messages",
-                defaultSort = SquawkContract.COLUMN_DATE + " DESC")
-        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/messages");
+    @Nullable
+    @Override
+    public Cursor query(@NonNull Uri uri, @Nullable String[] projection,
+                        @Nullable String selection, @Nullable String[] selectionArgs,
+                        @Nullable String sortOrder) {
+        if (matcher.match(uri) != SQUAWKS) {
+            return null;
+        }
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor returnValue = db.query(SquawkContract.TABLE_PATH, projection, selection, selectionArgs, null, null, sortOrder);
+        returnValue.setNotificationUri(getContext().getContentResolver(), uri);
+        return returnValue;
+    }
+
+    @Nullable
+    @Override
+    public String getType(@NonNull Uri uri) {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
+
+        return null;
+    }
+
+    @Override
+    public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+        return 0;
+    }
+
+    @Override
+    public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
+        return 0;
     }
 }
